@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.1.5 beta
+// @version     0.1.6 beta
 // ==/UserScript==
 
 $(function(){
@@ -16,7 +16,7 @@ $(function(){
 	var coinsToKarma = 0;
 
 	// Тотемный столб
-	if (addr = '/square/totemic') {
+	if (addr == '/square/totemic') {
 
 		// Подсчёт оставшихся монет для столба
 		$('.karma-append').remove();
@@ -272,7 +272,7 @@ $(function(){
 	$('.tastic-q').after('<div class="tastic-q tastic-description"><b class="gt">Описание:</b>'+tasticDescription+'</div>');
 
 	// Барахолка
-	if (addr = '/location/fleamarket/index/type/all/currency/all/auction/mix/sort/price/order/asc') {
+	if (addr == '/location/fleamarket/index/type/all/currency/all/auction/mix/sort/price/order/asc') {
 		$('.list-view > .items').each(function(e){
 			// @TODO - получать данные о продавце и добавлять значок стаи, название стаи и ссылку на неё
 			console.log(e);
