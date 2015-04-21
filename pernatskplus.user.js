@@ -7,8 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @require     https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
-// @version     0.1.3 beta
+// @version     0.1.4 beta
 // ==/UserScript==
 
 $(function(){
