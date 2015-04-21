@@ -200,7 +200,7 @@ $(function(){
 		tasticDescription = 'Помолиться тотему указанное количество раз.';
 	}
 	else
-	if (tasticQuest.indexOf('Покажи, что ты не жмот, выиграй, но наоборот.')>0) {
+	if (tasticQuest.indexOf('Покажи, что ты не жмот, выиграй, но наоборот.')>0) { // ok
 		tasticDescription = 'Потерять в сражалке указанное количество монет.';
 	}
 	else
