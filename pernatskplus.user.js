@@ -8,7 +8,7 @@
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
-// @version     0.1 beta
+// @version     0.1.3 beta
 // ==/UserScript==
 
 $(function(){
@@ -32,7 +32,7 @@ $(function(){
 
 	}
 	// Положить денег до максимума крамы
-	$('#add-full-karma').click(function(){
+	$('#add-full-karma').unbind('click').click(function(){
 		$('#totemic-money').val(coinsToKarma);
 		$('#res')[0].checked = true;
 	});
