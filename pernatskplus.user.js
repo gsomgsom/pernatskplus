@@ -21,15 +21,15 @@ $(function(){
 
 		// Подсчёт оставшихся монет для столба
 		$('.karma-append').remove();
-		var karma = parseInt($('.karma').find('b:last').text());
+		var karma = parseInt($('.karma').find('b:last').text().replace(/\s/g, ''));
 		coinsToKarma = ((1000-karma)*5*lvl);
 		if (karma < 1000) {
-			$('.karma').append('<span class="karma-append">, осталось уплатить '+coinsToKarma+' <b title="монеты" class="g18_icons i_coin"><span>{coins}</span></b> <b id="add-full-karma" title="Положить остаток" class="inbox-plus">+</b></span>');
+			$('.karma').append('<span class="karma-append">, осталось пожертвовать '+coinsToKarma+' <b title="монеты" class="g18_icons i_coin"><span>{coins}</span></b> <b id="add-full-karma" title="Положить остаток" class="inbox-plus">+</b></span>');
 		}
 		else {
-			$('.karma').append('<span class="karma-append">, больше платить не надо.</span>');
+			$('.karma').append('<span class="karma-append">, сегодня больше жертвовать не надо.</span>');
 		}
-		
+
 	}
 	// Положить денег до максимума крамы
 	$('#add-full-karma').click(function(){
