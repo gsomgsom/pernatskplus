@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.0
+// @version     0.2.1
 // ==/UserScript==
 
 $(function(){
@@ -19,7 +19,7 @@ $(function(){
 
 	// Загружаем настройки
 	if (supportsLocalStorage()) {
-		if (localStorage["pernatskPlus.clanIcons"].length == 0) {
+		if (typeof localStorage["pernatskPlus.clanIcons"] == "undefined") {
 			localStorage["pernatskPlus.clanIcons"] = clanIcons;
 		}
 		clanIcons = (localStorage["pernatskPlus.clanIcons"] == "true");
