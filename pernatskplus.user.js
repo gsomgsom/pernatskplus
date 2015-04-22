@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.1
+// @version     0.2.2
 // ==/UserScript==
 
 $(function(){
@@ -265,7 +265,7 @@ $(function(){
 		tasticDescription = 'Купить на барахолке указанное количество предметов.';
 	}
 	else
-	if (tasticQuest.indexOf('Нужно круче тебе стать, чтобы премию набрать...') > 0) {
+	if (tasticQuest.indexOf('Нужно круче тебе стать, чтобы премию забрать') > 0) {
 		tasticDescription = 'Прокачать единицу пернатости.';
 	}
 	else
