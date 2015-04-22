@@ -1,7 +1,7 @@
 # pernatskPlus
 pernatskPlus - пользовательский скрипт для браузерной игры "Пернатск", расширяющий возможности игры. Не является ботом и не запрещён.
 
-# Установка и спользование
+# Установка и использование
 Для веб-браузера Firefox необходимо установить плагин Greasemonkey, после чего установить скрипт
 https://github.com/gsomgsom/pernatskplus/raw/master/pernatskplus.user.js
 После чего скрипт будет работать автоматически. Отключить его можно в случае необходимости через меню Greasemonkey.
@@ -10,6 +10,8 @@ https://github.com/gsomgsom/pernatskplus/raw/master/pernatskplus.user.js
 https://chrome.google.com/webstore/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo
 
 В других браузерах скрипт не проверялся.
+
+Настройки скрипта находятся во вкладке настроек персонажа /nest/bird/settings
 
 # Возможности
 На данный момент пользовательский скрипт может всего несколько вещей:

@@ -1,22 +1,47 @@
 // ==UserScript==
 // @name        pernatskPlus
-// @description Добавляет плюшечки и рюшечки
+// @description Улучшает и без того хорошую игру "Пернатск".
 // @author      zhelneen@yandex.ru
 // @license     MIT
 // @domain      https://pernatsk.ru/*
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.1.7 beta
+// @version     0.2.0
 // ==/UserScript==
 
 $(function(){
-	var addr = location.pathname;
+	var addr = location.pathname; // алиас относительного пути
 	var lvl = parseInt($('div [title="уровень"] > b:last').text()); // уровень
-	var coinsToKarma = 0;
+	var coinsToKarma = 0; // монет до полной кармы
+	
+	var clanIcons = true; // показывать значки стай
+
+	// Загружаем настройки
+	if (supportsLocalStorage()) {
+		if (localStorage["pernatskPlus.clanIcons"].length == 0) {
+			localStorage["pernatskPlus.clanIcons"] = clanIcons;
+		}
+		clanIcons = (localStorage["pernatskPlus.clanIcons"] == "true");
+	}
+
+	// Проверяет, можно ли пользоваться local storage
+	function supportsLocalStorage() {
+		try {
+			return 'localStorage' in window && window['localStorage'] !== null;
+		} catch (e) {
+			console.log('localStorage не работает.');
+			return false;
+		}
+	}
 
 	// Подгружает иконки стай птицам в контейнере t
 	function getBirdsClans (t) {
+		if (!clanIcons) {
+			console.log('Значки стай отключены в настройках.');
+			return false;
+		}
+
 		var href = $(t).parent().parent().attr('href');
 		if (typeof href === "undefined") {
 			href = $(t).parent().attr('href');
@@ -45,6 +70,52 @@ $(function(){
 	// Проставим значок стаи всем птицам, засветившимся в "коротких сообщениях" в левом сайдбаре
 	$('#actions-0').find('[title="уровень"]').each(function(){getBirdsClans(this)});
 
+	// Настройки
+	if (addr == '/nest/bird/settings') {
+		// форма с настройками юзерскрипта
+		var settingsFormPlus = 
+		'<div id="settingsFormPlus">'+
+		'	<div class="stat-ct">pernatskPlus</div>'+
+		'	<div class="set-3">'+
+		//'		<div class="set-action">'+
+		//'			<b>Кэширование персонажей</b>:'+
+		//'			<br>'+
+		//'			<select id="configPlusCache" name="configPlusCache">'+
+		//'				<option selected="selected" value="0">Не кэшируем</option>'+
+		//'				<option value="1">1 час</option>'+
+		//'				<option value="3">3 часа</option>'+
+		//'				<option value="6">6 часов</option>'+
+		//'			</select>'+
+		//'		</div>'+
+		'		<b class="g18_icons i-clan" title="Значки стай"></b>'+
+		'		<input id="configPlusClanIcons" type="checkbox" value="1" name="configPlusClanIcons">'+
+		'		Включить <b>Значки стай</b>'+
+		'		<div class="separator"></div>'+
+		'		<div class="set-action">'+
+		'			<button class="butt_action butt_mid butt_save_plus_config">Сохранить</button>'+
+		'		</div>'+
+		'	</div>'+
+		'</div>';
+
+		$('#settingsFormPlus').remove();
+		$('.pl-sub-cont > .pl-sub-ct table tr:first td:last').prepend(settingsFormPlus);
+		
+		if (clanIcons) {
+			$('#configPlusClanIcons').attr('checked', 'checked');
+		}
+		else {
+			$('#configPlusClanIcons').removeAttr('checked');
+		}
+
+		$('.butt_save_plus_config').unbind('click').click(function() {
+			if (!supportsLocalStorage()) { return false; }
+			clanIcons = ($('#configPlusClanIcons').attr('checked') == 'checked');
+			console.log('Сохраняем настройки. ' + clanIcons);
+			localStorage["pernatskPlus.clanIcons"] = clanIcons;
+		});
+
+	}
+
 	// Тотемный столб
 	if (addr == '/square/totemic') {
 
@@ -60,7 +131,7 @@ $(function(){
 		}
 
 	}
-	// Положить денег до максимума крамы
+	// Положить денег до максимума кармы
 	$('#add-full-karma').unbind('click').click(function(){
 		$('#totemic-money').val(coinsToKarma);
 		$('#res')[0].checked = true;
