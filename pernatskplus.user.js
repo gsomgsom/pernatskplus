@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.2
+// @version     0.2.3
 // ==/UserScript==
 
 $(function(){
@@ -122,7 +122,7 @@ $(function(){
 		// Подсчёт оставшихся монет для столба
 		$('.karma-append').remove();
 		var karma = parseInt($('.karma').find('b:last').text().replace(/\s/g, ''));
-		coinsToKarma = ((1000-karma)*5*lvl);
+		coinsToKarma = ((1000-karma)*5*(lvl+1));
 		if (karma < 1000) {
 			$('.karma').append('<span class="karma-append">, осталось пожертвовать '+coinsToKarma+' <b title="монеты" class="g18_icons i_coin"><span>{coins}</span></b> <b id="add-full-karma" title="Положить остаток" class="inbox-plus">+</b></span>');
 		}
@@ -311,6 +311,10 @@ $(function(){
 	else
 	if (tasticQuest.indexOf('Редкие вещи повсюду ищи, несколько штук и мне покажи.') > 0) {
 		tasticDescription = 'Найти указанное количество редликов.';
+	}
+	else
+	if (tasticQuest.indexOf('Садоводством занимайся, ковыряй и улыбайся.') > 0) {
+		tasticDescription = 'Наковырять под тотемным столбом указанное количество раз.';
 	}
 	else
 	if (tasticQuest.indexOf('Сделай для себя заметку, чтоб отправиться в разведку.') > 0) {
