@@ -24,9 +24,15 @@ $(function(){
 		if (typeof localStorage["pernatskPlus.clanIcons"] == "undefined") {
 			localStorage["pernatskPlus.clanIcons"] = clanIcons;
 		}
+		if (typeof localStorage["pernatskPlus.potText"] == "undefined") {
+			localStorage["pernatskPlus.potText"] == potText;
+		}
+		if (typeof localStorage["pernatskPlus.plantId"] == "undefined") {
+			localStorage["pernatskPlus.plantId"] == plantId;
+		}
 		clanIcons = (localStorage["pernatskPlus.clanIcons"] == "true");
-		potText = (localStorage["pernatskPlus.potText"] == "");
-		plantId = (localStorage["pernatskPlus.plantId"] == 0);
+		potText = localStorage["pernatskPlus.potText"];
+		plantId = localStorage["pernatskPlus.plantId"];
 	}
 
 	// Проверяет, можно ли пользоваться local storage
@@ -73,11 +79,6 @@ $(function(){
 
 	// Проставим значок стаи всем птицам, засветившимся в "коротких сообщениях" в левом сайдбаре
 	$('#actions-0').find('[title="уровень"]').each(function(){getBirdsClans(this)});
-
-	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
-	if (plantId) {
-		$('#version').html('До созревания <b class="g18_icons i-plant-' + plantId + '"></b>: ' + t);
-	}
 
 	// Настройки
 	if (addr == '/nest/bird/settings') {
@@ -416,15 +417,18 @@ $(function(){
 	if (addr.indexOf('nest/landscape') > 0) {
 		potText = $('.pot-growing-time > .timer').html();
 		var plant = $('.pot-growing-title').text();
-		switch (plant) {
-			case 'Папоротник': plantId = 1; break;
-			case 'Хмель': plantId = 2; break;
-			case 'Алоэ': plantId = 3; break;
-			case 'Ромашка': plantId = 4; break;
-			case 'Клевер': plantId = 5; break;
-		}
+		if (plant.indexOf('Папоротник') > 0) plantId = 1;
+		if (plant.indexOf('Хмель') > 0) plantId = 2;
+		if (plant.indexOf('Алоэ') > 0) plantId = 3;
+		if (plant.indexOf('Ромашка') > 0) plantId = 4;
+		if (plant.indexOf('Клевер') > 0) plantId = 5;
 		localStorage["pernatskPlus.potText"] = potText;
 		localStorage["pernatskPlus.plantId"] = plantId;
+	}
+
+	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
+	if (plantId > 0) {
+		$('#version').html('До созревания <b class="g18_icons i-plant-' + plantId + '"></b>: ' + potText);
 	}
 
 });
