@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.3
+// @version     0.2.4
 // ==/UserScript==
 
 $(function(){
@@ -16,6 +16,8 @@ $(function(){
 	var coinsToKarma = 0; // монет до полной кармы
 	
 	var clanIcons = true; // показывать значки стай
+	var potText = ""; // Таймер горшка
+	var plantId = 0; // Тип растения
 
 	// Загружаем настройки
 	if (supportsLocalStorage()) {
@@ -23,6 +25,8 @@ $(function(){
 			localStorage["pernatskPlus.clanIcons"] = clanIcons;
 		}
 		clanIcons = (localStorage["pernatskPlus.clanIcons"] == "true");
+		potText = (localStorage["pernatskPlus.potText"] == "");
+		plantId = (localStorage["pernatskPlus.plantId"] == 0);
 	}
 
 	// Проверяет, можно ли пользоваться local storage
@@ -69,6 +73,11 @@ $(function(){
 
 	// Проставим значок стаи всем птицам, засветившимся в "коротких сообщениях" в левом сайдбаре
 	$('#actions-0').find('[title="уровень"]').each(function(){getBirdsClans(this)});
+
+	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
+	if (plantId) {
+		$('#version').html('До созревания <b class="g18_icons i-plant-' + plantId + '"></b>: ' + t);
+	}
 
 	// Настройки
 	if (addr == '/nest/bird/settings') {
@@ -205,6 +214,10 @@ $(function(){
 		tasticDescription = 'Победить указанное количество злыдничей.';
 	}
 	else
+	if (tasticQuest.indexOf('Знак удачи иль проклятье? С молнией отправь ты счастье!') > 0) {
+		tasticDescription = 'Подарить метку. Неважно какую.';
+	}
+	else
 	if (tasticQuest.indexOf('К бурундуку иди-ка смело: появилось супер-дело.') > 0) {
 		tasticDescription = 'Выполнить указанное количество контрактов в бюро.';
 	}
@@ -235,6 +248,10 @@ $(function(){
 	else
 	if (tasticQuest.indexOf('Может сильно сдаться, что можешь ты поддаться.') > 0) {
 		tasticDescription = 'Проиграть в сражалке указанное количество раз.';
+	}
+	else
+	if (tasticQuest.indexOf('Молотка удар другой - цену бей своей ценой') > 0) {
+		tasticDescription = 'Сделать указанное количество ставок на аукционе.';
 	}
 	else
 	if (tasticQuest.indexOf('На пеньке, где поляна, ты найдёшь часть павлина.') > 0) {
@@ -305,6 +322,10 @@ $(function(){
 		tasticDescription = 'Потерять в сражалке указанное количество монет.';
 	}
 	else
+	if (tasticQuest.indexOf('Покажи: ядро метаешь лучше, нежели летаешь?') > 0) {
+		tasticDescription = 'Сдать норматив у Фила.';
+	}
+	else
 	if (tasticQuest.indexOf('Поставил противник ловушку, поймает тебя – закатит пирушку.') > 0) {
 		tasticDescription = 'Попасть в капкан указанное количество раз.';
 	}
@@ -345,12 +366,20 @@ $(function(){
 		tasticDescription = 'Выйграть в весышку указанное количество раз.';
 	}
 	else
+	if (tasticQuest.indexOf('У столба заройся глубже: клад мне настоящий нужен...') > 0) {
+		tasticDescription = 'Ковырять землю у столба, пока не найдётся клад.';
+	}
+	else
 	if (tasticQuest.indexOf('Условие простое – перчатки натянул, противника в бою нагнул.') > 0) {
 		tasticDescription = 'Выйграть на ринге указанное количество раз.';
 	}
 	else
 	if (tasticQuest.indexOf('Хватит терять блестящий металл: нычки спасут родной капитал!') > 0) {
 		tasticDescription = 'Продлить нычку на монеты.';
+	}
+	else
+	if (tasticQuest.indexOf('Что в лабиринте ты собрал, пусть меньше тяготит карман!') > 0) {
+		tasticDescription = 'Потратить указанное количество золотых шишек.';
 	}
 	else
 	if (tasticQuest.indexOf('Чтоб за всеми уследить, надо вовремя платить!') > 0) {
@@ -365,7 +394,7 @@ $(function(){
 		tasticDescription = 'Прокачать указанное количество характеристик (включая выносливость и интеллект).';
 	}
 	else
-	if (tasticQuest.indexOf('Эти вещицы в бою попадаются, те, что даст тотем, совсем не считаются.') > 0) { // ok
+	if (tasticQuest.indexOf('Эти вещицы в бою попадаются, те, что даст тотем, совсем не считаются.') > 0) {
 		tasticDescription = 'Найти столько колекционных предметов, сколько указано.';
 	}
 	else
@@ -381,6 +410,21 @@ $(function(){
 
 		// Проставим значок стаи всем продавцам и покупателям, сделавшим ставки
 		$('.list-view > .items').find('[title="уровень"]').each(function(){getBirdsClans(this)});
+	}
+
+	// Подоконник
+	if (addr.indexOf('nest/landscape') > 0) {
+		potText = $('.pot-growing-time > .timer').html();
+		var plant = $('.pot-growing-title').text();
+		switch (plant) {
+			case 'Папоротник': plantId = 1; break;
+			case 'Хмель': plantId = 2; break;
+			case 'Алоэ': plantId = 3; break;
+			case 'Ромашка': plantId = 4; break;
+			case 'Клевер': plantId = 5; break;
+		}
+		localStorage["pernatskPlus.potText"] = potText;
+		localStorage["pernatskPlus.plantId"] = plantId;
 	}
 
 });
