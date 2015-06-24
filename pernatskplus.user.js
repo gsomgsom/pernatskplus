@@ -446,7 +446,6 @@ $(function(){
 		indebtCones = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(2) .indebt .red').text());
 		localStorage["pernatskPlus.indebtCoins"] = indebtCoins;
 		localStorage["pernatskPlus.indebtCones"] = indebtCones;
-		alert(indebtCoins);
 	}
 
 	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
