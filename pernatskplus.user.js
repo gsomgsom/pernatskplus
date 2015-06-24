@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.4
+// @version     0.2.5
 // ==/UserScript==
 
 $(function(){
@@ -18,6 +18,8 @@ $(function(){
 	var clanIcons = true; // показывать значки стай
 	var potText = ""; // Таймер горшка
 	var plantId = 0; // Тип растения
+	var indebtCoins = 0; // Долг перед кубышкой в монетах
+	var indebtCones = 0; // Долг перед кубышкой в шишках
 
 	// Загружаем настройки
 	if (supportsLocalStorage()) {
@@ -25,14 +27,22 @@ $(function(){
 			localStorage["pernatskPlus.clanIcons"] = clanIcons;
 		}
 		if (typeof localStorage["pernatskPlus.potText"] == "undefined") {
-			localStorage["pernatskPlus.potText"] == potText;
+			localStorage["pernatskPlus.potText"] = potText;
 		}
 		if (typeof localStorage["pernatskPlus.plantId"] == "undefined") {
-			localStorage["pernatskPlus.plantId"] == plantId;
+			localStorage["pernatskPlus.plantId"] = plantId;
+		}
+		if (typeof localStorage["pernatskPlus.indebtCoins"] == "undefined") {
+			localStorage["pernatskPlus.indebtCoins"] = indebtCoins;
+		}
+		if (typeof localStorage["pernatskPlus.indebtCones"] == "undefined") {
+			localStorage["pernatskPlus.indebtCones"] = indebtCoins;
 		}
 		clanIcons = (localStorage["pernatskPlus.clanIcons"] == "true");
 		potText = localStorage["pernatskPlus.potText"];
 		plantId = localStorage["pernatskPlus.plantId"];
+		indebtCoins = localStorage["pernatskPlus.indebtCoins"];
+		indebtCones = localStorage["pernatskPlus.indebtCones"];
 	}
 
 	// Проверяет, можно ли пользоваться local storage
@@ -169,6 +179,10 @@ $(function(){
 	else
 	if (tasticQuest.indexOf('Бой, другой, и ты страдаешь, ведь здоровье ты теряешь.') > 0) {
 		tasticDescription = 'Потерять указанное количество здоровья.';
+	}
+	else
+	if (tasticQuest.indexOf('В эту хрупкую систему шишки вкладывают смело') > 0) {
+		tasticDescription = 'Вложить указанное количество шишек в пирамиду (5 * уровень) (?)';
 	}
 	else
 	if (tasticQuest.indexOf('Вещь покупай, с нею летай; она надевается, прочность снижается.') > 0) {
@@ -426,9 +440,28 @@ $(function(){
 		localStorage["pernatskPlus.plantId"] = plantId;
 	}
 
+	// Кубышка стаи
+	if (addr.indexOf('clan/thriftbox') > 0) {
+		indebtCoins = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(1) .indebt .red').text());
+		indebtCones = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(2) .indebt .red').text());
+		localStorage["pernatskPlus.indebtCoins"] = indebtCoins;
+		localStorage["pernatskPlus.indebtCones"] = indebtCones;
+		alert(indebtCoins);
+	}
+
 	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
 	if (plantId > 0) {
 		$('#version').html('До созревания <a href="/nest/landscape"><b class="g18_icons i-plant-' + plantId + '"></b></a>: ' + potText);
+	}
+
+	// Добавим долги в монетах перед кубышкой(если они есть)
+	if (indebtCoins > 0) {
+		$('#b-c-menu').parent().find('ul li:nth-child(1) div b').after(' (<b style="color: #7d0000;">' + indebtCoins + '</b>)');
+	}
+
+	// Добавим долги в шишках перед кубышкой(если они есть)
+	if (indebtCones > 0) {
+		$('#b-c-menu').parent().find('ul li:nth-child(2) div b').after(' (<b style="color: #7d0000;">' + indebtCones + '</b>)');
 	}
 
 });
