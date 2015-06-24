@@ -428,7 +428,7 @@ $(function(){
 
 	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
 	if (plantId > 0) {
-		$('#version').html('До созревания <b class="g18_icons i-plant-' + plantId + '"></b>: ' + potText);
+		$('#version').html('До созревания <a href="/nest/landscape"><b class="g18_icons i-plant-' + plantId + '"></b></a>: ' + potText);
 	}
 
 });
