@@ -429,7 +429,7 @@ $(function(){
 
 	// Подоконник
 	if (addr.indexOf('nest/landscape') > 0) {
-		potText = $('.pot-growing-time > .timer').html();
+		potText = $('.pot-growing-time > .timer').html().replace(/, true/g, ', false');
 		var plant = $('.pot-growing-title').text();
 		if (plant.indexOf('Папоротник') > 0) plantId = 1;
 		if (plant.indexOf('Хмель') > 0) plantId = 2;
@@ -442,8 +442,8 @@ $(function(){
 
 	// Кубышка стаи
 	if (addr.indexOf('clan/thriftbox') > 0) {
-		indebtCoins = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(1) .indebt .red').text());
-		indebtCones = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(2) .indebt .red').text());
+		indebtCoins = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(1) .indebt .red').text().replace(/\s/g, ''));
+		indebtCones = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(2) .indebt .red').text().replace(/\s/g, ''));
 		localStorage["pernatskPlus.indebtCoins"] = indebtCoins;
 		localStorage["pernatskPlus.indebtCones"] = indebtCones;
 	}
