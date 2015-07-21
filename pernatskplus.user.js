@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.5
+// @version     0.2.6
 // ==/UserScript==
 
 $(function(){
@@ -142,7 +142,7 @@ $(function(){
 		// Подсчёт оставшихся монет для столба
 		$('.karma-append').remove();
 		var karma = parseInt($('.karma').find('b:last').text().replace(/\s/g, ''));
-		coinsToKarma = ((1000-karma)*5*(lvl+1));
+		coinsToKarma = ((1000-karma)*5.2*(lvl+1));
 		if (karma < 1000) {
 			$('.karma').append('<span class="karma-append">, осталось пожертвовать '+coinsToKarma+' <b title="монеты" class="g18_icons i_coin"><span>{coins}</span></b> <b id="add-full-karma" title="Положить остаток" class="inbox-plus">+</b></span>');
 		}
@@ -187,6 +187,10 @@ $(function(){
 	else
 	if (tasticQuest.indexOf('Вещь покупай, с нею летай; она надевается, прочность снижается.') > 0) {
 		tasticDescription = 'Использовать уник указанное количество раз.';
+	}
+	else
+	if (tasticQuest.indexOf('Враг в бою успешно скрылся и невредимый удалился.') > 0) {
+		tasticDescription = 'У противника должна сработать листва.';
 	}
 	else
 	if (tasticQuest.indexOf('Враг твой терпит поражение, без здоровья нет движения.') > 0) {
@@ -237,7 +241,7 @@ $(function(){
 		tasticDescription = 'Выполнить указанное количество контрактов в бюро.';
 	}
 	else
-	if (tasticQuest.indexOf('К петуху в кусты иди, под хвост дозу получи.') > 0) {
+	if (tasticQuest.indexOf('К петуху в кусты сходи, под хвост дозу получи.') > 0) {
 		tasticDescription = 'Попытаться пробраться в поместье Ефремыча и проиграть.';
 	}
 	else
@@ -289,6 +293,10 @@ $(function(){
 		tasticDescription = 'Провести указанное время в бюро (в минутах).';
 	}
 	else
+	if (tasticQuest.indexOf('Неприятель? Диссидент? Закажи за горсть монет!') > 0) {
+		tasticDescription = 'Сделать заказ в Крепости ассасинов.';
+	}
+	else
 	if (tasticQuest.indexOf('Ну… в лесу ты заблудись… выбрав путь, домой вернись.') > 0) {
 		tasticDescription = 'Попасть на развилку указанное количество раз.';
 	}
@@ -333,12 +341,20 @@ $(function(){
 		tasticDescription = 'Помолиться тотему указанное количество раз.';
 	}
 	else
+	if (tasticQuest.indexOf('Пойди узнай, чего достоин: награды иль чего пустого?') > 0) { // ok
+		tasticDescription = 'Крутануть Колесо безумия.';
+	}
+	else
 	if (tasticQuest.indexOf('Покажи, что ты не жмот, выиграй, но наоборот.') > 0) { // ok
 		tasticDescription = 'Потерять в сражалке указанное количество монет.';
 	}
 	else
 	if (tasticQuest.indexOf('Покажи: ядро метаешь лучше, нежели летаешь?') > 0) {
 		tasticDescription = 'Сдать норматив у Фила.';
+	}
+	else
+	if (tasticQuest.indexOf('Покажи-ка мастер-класс, ударив клюшкой пару раз.') > 0) {
+		tasticDescription = 'Получить несколько клубных единиц (гольф).';
 	}
 	else
 	if (tasticQuest.indexOf('Поставил противник ловушку, поймает тебя – закатит пирушку.') > 0) {
@@ -361,8 +377,16 @@ $(function(){
 		tasticDescription = 'Выкинуть указанное количество вещей.';
 	}
 	else
+	if (tasticQuest.indexOf('Сей усатый диверсант монетам всяко будет рад.') > 0) {
+		tasticDescription = 'Вложить золото в пирамиду.';
+	}
+	else
 	if (tasticQuest.indexOf('Собери бумажек пачку, обменяй их на заначку') > 0) {
 		tasticDescription = 'Обменять сертификаты.';
+	}
+	else
+	if (tasticQuest.indexOf('Стае действуй ты во благо: золота отсыпь с оклада.') > 0) {
+		tasticDescription = 'Положить золото в кубышку.';
 	}
 	else
 	if (tasticQuest.indexOf('То, что падает в лесу, собери-ка ты в бою.') > 0) {
@@ -429,7 +453,7 @@ $(function(){
 
 	// Подоконник
 	if (addr.indexOf('nest/landscape') > 0) {
-		potText = $('.pot-growing-time > .timer').html().replace(/, true/g, ', false');
+		potText = $('.pot-growing-time > .timer').html().replace(/, true/g, ', false').replace('/nest/landscape','none');
 		var plant = $('.pot-growing-title').text();
 		if (plant.indexOf('Папоротник') > 0) plantId = 1;
 		if (plant.indexOf('Хмель') > 0) plantId = 2;
