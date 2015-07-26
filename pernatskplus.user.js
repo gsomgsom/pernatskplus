@@ -440,6 +440,11 @@ $(function(){
 	if (tasticQuest.indexOf('Этот крепкий инструмент разбивает соль в момент.') > 0) {
 		tasticDescription = 'Найти кувалду.';
 	}
+	else
+	if (tasticQuest.indexOf('Молоток удар, другой: цену бей своей ценой.') > 0) {
+		tasticDescription = 'Поставить ставки на аукционе.';
+	}
+	
 
 	$('.tastic-description').remove();
 	$('.tastic-q').after('<div class="tastic-q tastic-description"><b class="gt">Описание:</b>'+tasticDescription+'</div>');
