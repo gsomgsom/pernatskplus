@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.6
+// @version     0.2.7
 // ==/UserScript==
 
 $(function(){
@@ -273,6 +273,10 @@ $(function(){
 		tasticDescription = 'Сделать указанное количество ставок на аукционе.';
 	}
 	else
+	if (tasticQuest.indexOf('Молоток удар, другой: цену бей своей ценой') > 0) {
+		tasticDescription = 'Сделать указанное количество ставок на аукционе.';
+	}
+	else
 	if (tasticQuest.indexOf('На пеньке, где поляна, ты найдёшь часть павлина.') > 0) {
 		tasticDescription = 'Получить перо (либо продлить медальон, либо разбить солевика, либо найти перо в разведке/бюро).';
 	}
@@ -456,10 +460,10 @@ $(function(){
 		potText = $('.pot-growing-time > .timer').html().replace(/, true/g, ', false').replace('/nest/landscape','none');
 		var plant = $('.pot-growing-title').text();
 		if (plant.indexOf('Папоротник') > 0) plantId = 1;
-		if (plant.indexOf('Хмель') > 0) plantId = 2;
-		if (plant.indexOf('Алоэ') > 0) plantId = 3;
-		if (plant.indexOf('Ромашка') > 0) plantId = 4;
-		if (plant.indexOf('Клевер') > 0) plantId = 5;
+		if (plant.indexOf('Хмель')      > 0) plantId = 2;
+		if (plant.indexOf('Алоэ')       > 0) plantId = 3;
+		if (plant.indexOf('Ромашка')    > 0) plantId = 4;
+		if (plant.indexOf('Клевер')     > 0) plantId = 5;
 		localStorage["pernatskPlus.potText"] = potText;
 		localStorage["pernatskPlus.plantId"] = plantId;
 	}
