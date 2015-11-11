@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.7
+// @version     0.2.8
 // ==/UserScript==
 
 $(function(){
@@ -90,6 +90,30 @@ $(function(){
 	// Проставим значок стаи всем птицам, засветившимся в "коротких сообщениях" в левом сайдбаре
 	$('#actions-0').find('[title="уровень"]').each(function(){getBirdsClans(this)});
 
+	// Домашняя страница птицы
+	if (addr == '/nest/bird') {
+		var nextStrengthCoins  = parseInt($('#strength') .find('b.i_coin').parent().text().replace(/\s/g, '').replace('{coins}', ''));
+		var nextAccuracyCoins  = parseInt($('#accuracy') .find('b.i_coin').parent().text().replace(/\s/g, '').replace('{coins}', ''));
+		var nextDefenceCoins   = parseInt($('#defence')  .find('b.i_coin').parent().text().replace(/\s/g, '').replace('{coins}', ''));
+		var nextDexterityCoins = parseInt($('#dexterity').find('b.i_coin').parent().text().replace(/\s/g, '').replace('{coins}', ''));
+		var nextIntuitionCoins = parseInt($('#intuition').find('b.i_coin').parent().text().replace(/\s/g, '').replace('{coins}', ''));
+		if (totalBirdsMoney.coins < nextStrengthCoins) {
+			$('#strength').find('b.i_coin').attr('title', 'Взять из кубышки: ' + (nextStrengthCoins - totalBirdsMoney.coins));
+		}
+		if (totalBirdsMoney.coins < nextAccuracyCoins) {
+			$('#accuracy').find('b.i_coin').attr('title', 'Взять из кубышки: ' + (nextAccuracyCoins - totalBirdsMoney.coins));
+		}
+		if (totalBirdsMoney.coins < nextDefenceCoins) {
+			$('#defence').find('b.i_coin').attr('title', 'Взять из кубышки: ' + (nextDefenceCoins - totalBirdsMoney.coins));
+		}
+		if (totalBirdsMoney.coins < nextDexterityCoins) {
+			$('#dexterity').find('b.i_coin').attr('title', 'Взять из кубышки: ' + (nextDexterityCoins - totalBirdsMoney.coins));
+		}
+		if (totalBirdsMoney.coins < nextIntuitionCoins) {
+			$('#intuition').find('b.i_coin').attr('title', 'Взять из кубышки: ' + (nextIntuitionCoins - totalBirdsMoney.coins));
+		}
+	}
+	
 	// Настройки
 	if (addr == '/nest/bird/settings') {
 		// форма с настройками юзерскрипта
