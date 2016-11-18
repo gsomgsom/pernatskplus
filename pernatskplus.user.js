@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.2.8
+// @version     0.3.1
 // ==/UserScript==
 
 $(function(){
@@ -15,32 +15,17 @@ $(function(){
 	var lvl = parseInt($('div [title="уровень"] > b:last').text()); // уровень
 	var coinsToKarma = 0; // монет до полной кармы
 	
-	var clanIcons = true; // показывать значки стай
-	var potText = ""; // Таймер горшка
-	var plantId = 0; // Тип растения
 	var indebtCoins = 0; // Долг перед кубышкой в монетах
 	var indebtCones = 0; // Долг перед кубышкой в шишках
 
 	// Загружаем настройки
 	if (supportsLocalStorage()) {
-		if (typeof localStorage["pernatskPlus.clanIcons"] == "undefined") {
-			localStorage["pernatskPlus.clanIcons"] = clanIcons;
-		}
-		if (typeof localStorage["pernatskPlus.potText"] == "undefined") {
-			localStorage["pernatskPlus.potText"] = potText;
-		}
-		if (typeof localStorage["pernatskPlus.plantId"] == "undefined") {
-			localStorage["pernatskPlus.plantId"] = plantId;
-		}
 		if (typeof localStorage["pernatskPlus.indebtCoins"] == "undefined") {
 			localStorage["pernatskPlus.indebtCoins"] = indebtCoins;
 		}
 		if (typeof localStorage["pernatskPlus.indebtCones"] == "undefined") {
 			localStorage["pernatskPlus.indebtCones"] = indebtCoins;
 		}
-		clanIcons = (localStorage["pernatskPlus.clanIcons"] == "true");
-		potText = localStorage["pernatskPlus.potText"];
-		plantId = localStorage["pernatskPlus.plantId"];
 		indebtCoins = localStorage["pernatskPlus.indebtCoins"];
 		indebtCones = localStorage["pernatskPlus.indebtCones"];
 	}
@@ -54,41 +39,6 @@ $(function(){
 			return false;
 		}
 	}
-
-	// Подгружает иконки стай птицам в контейнере t
-	function getBirdsClans (t) {
-		if (!clanIcons) {
-			console.log('Значки стай отключены в настройках.');
-			return false;
-		}
-
-		var href = $(t).parent().parent().attr('href');
-		if (typeof href === "undefined") {
-			href = $(t).parent().attr('href');
-		}
-		var bird = t;
-		$(t).parent().find('img').remove();
-		$.ajax({
-			type: 'GET',
-			cache: true,
-			url: href,
-			success: function (data) {
-				var img = $(data).find('.name-line .clan');
-				var clan = $(img).parent().find('b').text();
-				if (img.length == 0) {
-					clan = $(data).find('.clan > a > b:last').text();
-					if (clan.length > 0) {
-						img = $('<b class="g18_icons i-clan"></b>');
-					}
-				}
-				$(img).attr('title', clan);
-				$(bird).after($(img));
-			}
-		});
-	}
-
-	// Проставим значок стаи всем птицам, засветившимся в "коротких сообщениях" в левом сайдбаре
-	$('#actions-0').find('[title="уровень"]').each(function(){getBirdsClans(this)});
 
 	// Домашняя страница птицы
 	if (addr == '/nest/bird') {
@@ -114,59 +64,13 @@ $(function(){
 		}
 	}
 	
-	// Настройки
-	if (addr == '/nest/bird/settings') {
-		// форма с настройками юзерскрипта
-		var settingsFormPlus = 
-		'<div id="settingsFormPlus">'+
-		'	<div class="stat-ct">pernatskPlus</div>'+
-		'	<div class="set-3">'+
-		//'		<div class="set-action">'+
-		//'			<b>Кэширование персонажей</b>:'+
-		//'			<br>'+
-		//'			<select id="configPlusCache" name="configPlusCache">'+
-		//'				<option selected="selected" value="0">Не кэшируем</option>'+
-		//'				<option value="1">1 час</option>'+
-		//'				<option value="3">3 часа</option>'+
-		//'				<option value="6">6 часов</option>'+
-		//'			</select>'+
-		//'		</div>'+
-		'		<b class="g18_icons i-clan" title="Значки стай"></b>'+
-		'		<input id="configPlusClanIcons" type="checkbox" value="1" name="configPlusClanIcons">'+
-		'		Включить <b>Значки стай</b>'+
-		'		<div class="separator"></div>'+
-		'		<div class="set-action">'+
-		'			<button class="butt_action butt_mid butt_save_plus_config">Сохранить</button>'+
-		'		</div>'+
-		'	</div>'+
-		'</div>';
-
-		$('#settingsFormPlus').remove();
-		$('.pl-sub-cont > .pl-sub-ct table tr:first td:last').prepend(settingsFormPlus);
-		
-		if (clanIcons) {
-			$('#configPlusClanIcons').attr('checked', 'checked');
-		}
-		else {
-			$('#configPlusClanIcons').removeAttr('checked');
-		}
-
-		$('.butt_save_plus_config').unbind('click').click(function() {
-			if (!supportsLocalStorage()) { return false; }
-			clanIcons = ($('#configPlusClanIcons').attr('checked') == 'checked');
-			console.log('Сохраняем настройки. ' + clanIcons);
-			localStorage["pernatskPlus.clanIcons"] = clanIcons;
-		});
-
-	}
-
 	// Тотемный столб
 	if (addr == '/square/totemic') {
 
 		// Подсчёт оставшихся монет для столба
 		$('.karma-append').remove();
 		var karma = parseInt($('.karma').find('b:last').text().replace(/\s/g, ''));
-		coinsToKarma = ((1000-karma)*5.2*(lvl+1));
+		coinsToKarma = ((1000-karma)*6.6*lvl); // справедливо на 13 лвл, на 11 - 5.5
 		if (karma < 1000) {
 			$('.karma').append('<span class="karma-append">, осталось пожертвовать '+coinsToKarma+' <b title="монеты" class="g18_icons i_coin"><span>{coins}</span></b> <b id="add-full-karma" title="Положить остаток" class="inbox-plus">+</b></span>');
 		}
@@ -185,6 +89,10 @@ $(function(){
 	var tasticQuest = $('.tastic-q').text();
 	var tasticDescription = '<strong>Загадка ;)</strong>';
 
+	if (tasticQuest.indexOf('А ведь можно пернатому, хоть и малому гномику, быстро, решительно повлиять на экономику!') > 0) {
+		tasticDescription = 'Купить/Поменять Паксыч.';
+	}
+	else
 	if (tasticQuest.indexOf('Бей врагов и – вот сюрприз – ставь зубастый механизм.') > 0) {
 		tasticDescription = 'Необходимо установить капкан и поймать сколько указано птиц.';
 	}
@@ -197,12 +105,20 @@ $(function(){
 		tasticDescription = 'Успешно метнуть в солевиков кувалду сколько указано раз.';
 	}
 	else
+	if (tasticQuest.indexOf('Без подсказок, цифр иль книг - не открыть тебе тайник!') > 0) {
+		tasticDescription = 'Попытаться открыть купол у Ефрема указанное количество раз.';
+	}
+	else
 	if (tasticQuest.indexOf('Бой, бюро иль злыдничи: зелёных пазлов получи.') > 0) {
 		tasticDescription = 'Набрать указанное количество опыта.';
 	}
 	else
 	if (tasticQuest.indexOf('Бой, другой, и ты страдаешь, ведь здоровье ты теряешь.') > 0) {
 		tasticDescription = 'Потерять указанное количество здоровья.';
+	}
+	else
+	if (tasticQuest.indexOf('Бойцами славен его род - навались толпой народ!') > 0) {
+		tasticDescription = 'Провести сражение с Ефремычем, с любым результатом.';
 	}
 	else
 	if (tasticQuest.indexOf('В эту хрупкую систему шишки вкладывают смело') > 0) {
@@ -237,8 +153,12 @@ $(function(){
 		tasticDescription = 'Получить военное пособие.';
 	}
 	else
+	if (tasticQuest.indexOf('Есть сокровище простое в необычной упаковке, но найти его возможно лишь с отличной подготовкой.') > 0) {
+		tasticDescription = 'Вскрыть клады в лабиринте мрачного леса.';
+	}
+	else
 	if (tasticQuest.indexOf('Есть разных видов и цветов... Их отыщи и будь таков!') > 0) {
-		tasticDescription = 'Найти пуговки (?)';
+		tasticDescription = 'Найти пуговки';
 	}
 	else
 	if (tasticQuest.indexOf('Есть у каждого из нас дятлов статуи простые. Мой указ - продлить одну, какую - безразлично.') > 0) {
@@ -365,6 +285,10 @@ $(function(){
 		tasticDescription = 'Разместить солевик в пещере.';
 	}
 	else
+	if (tasticQuest.indexOf('Парк чудес! А всё же ловко, только лишь нажав на кнопку, интеллект свой подключи - сразу чудо получи.') > 0) {
+		tasticDescription = 'Отправить на переработку любые редлики, результат не важен.';
+	}
+	else
 	if (tasticQuest.indexOf('Подойди-ка ты к столбу, вознеси-ка ты мольбу.') > 0) {
 		tasticDescription = 'Помолиться тотему указанное количество раз.';
 	}
@@ -389,12 +313,20 @@ $(function(){
 		tasticDescription = 'Попасть в капкан указанное количество раз.';
 	}
 	else
+	if (tasticQuest.indexOf('Пыль, земля, немного серы, глина, солим все без меры, да песка добавим ловко - замешается') > 0) {
+		tasticDescription = 'Замешать шпаклёвку';
+	}
+	else
 	if (tasticQuest.indexOf('Редкие вещи повсюду ищи, несколько штук и мне покажи.') > 0) {
 		tasticDescription = 'Найти указанное количество редликов.';
 	}
 	else
 	if (tasticQuest.indexOf('Садоводством занимайся, ковыряй и улыбайся.') > 0) {
 		tasticDescription = 'Наковырять под тотемным столбом указанное количество раз.';
+	}
+	else
+	if (tasticQuest.indexOf('Свою удаль докажи - в небе драку завяжи.') > 0) {
+		tasticDescription = 'Завязать сражение в полете на дирижабле.';
 	}
 	else
 	if (tasticQuest.indexOf('Сделай для себя заметку, чтоб отправиться в разведку.') > 0) {
@@ -415,6 +347,10 @@ $(function(){
 	else
 	if (tasticQuest.indexOf('Стае действуй ты во благо: золота отсыпь с оклада.') > 0) {
 		tasticDescription = 'Положить золото в кубышку.';
+	}
+	else
+	if (tasticQuest.indexOf('Там не то, а вот тут пара, вариантов то не счесть! Начинаю все сначала, ведь еще попытки есть.') > 0) {
+		tasticDescription = 'Открыть ячейки на Поле всячины.';
 	}
 	else
 	if (tasticQuest.indexOf('То, что падает в лесу, собери-ка ты в бою.') > 0) {
@@ -472,37 +408,12 @@ $(function(){
 	$('.tastic-description').remove();
 	$('.tastic-q').after('<div class="tastic-q tastic-description"><b class="gt">Описание:</b>'+tasticDescription+'</div>');
 
-	// Барахолка
-	if (addr.indexOf('location/fleamarket') > 0) {
-
-		// Проставим значок стаи всем продавцам и покупателям, сделавшим ставки
-		$('.list-view > .items').find('[title="уровень"]').each(function(){getBirdsClans(this)});
-	}
-
-	// Подоконник
-	if (addr.indexOf('nest/landscape') > 0) {
-		potText = $('.pot-growing-time > .timer').html().replace(/, true/g, ', false').replace('/nest/landscape','none');
-		var plant = $('.pot-growing-title').text();
-		if (plant.indexOf('Папоротник') > 0) plantId = 1;
-		if (plant.indexOf('Хмель')      > 0) plantId = 2;
-		if (plant.indexOf('Алоэ')       > 0) plantId = 3;
-		if (plant.indexOf('Ромашка')    > 0) plantId = 4;
-		if (plant.indexOf('Клевер')     > 0) plantId = 5;
-		localStorage["pernatskPlus.potText"] = potText;
-		localStorage["pernatskPlus.plantId"] = plantId;
-	}
-
 	// Кубышка стаи
 	if (addr.indexOf('clan/thriftbox') > 0) {
 		indebtCoins = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(1) .indebt .red').text().replace(/\s/g, ''));
 		indebtCones = parseInt($('.pl-sub-ct .square-block .inbox:nth-child(2) .indebt .red').text().replace(/\s/g, ''));
 		localStorage["pernatskPlus.indebtCoins"] = indebtCoins;
 		localStorage["pernatskPlus.indebtCones"] = indebtCones;
-	}
-
-	// Если найдено растение (для этого надо заходить в подоконник), показываем таймер до созревания
-	if (plantId > 0) {
-		$('#version').html('До созревания <a href="/nest/landscape"><b class="g18_icons i-plant-' + plantId + '"></b></a>: ' + potText);
 	}
 
 	// Добавим долги в монетах перед кубышкой(если они есть)
