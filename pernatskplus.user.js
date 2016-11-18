@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.3.1
+// @version     0.3.2
 // ==/UserScript==
 
 $(function(){
@@ -241,7 +241,7 @@ $(function(){
 		tasticDescription = 'Провести указанное время в бюро (в минутах).';
 	}
 	else
-	if (tasticQuest.indexOf('Неприятель? Диссидент? Закажи за горсть монет!') > 0) {
+	if (tasticQuest.indexOf('Неприятель? Диссидент? Закажи и награду приложи!') > 0) {
 		tasticDescription = 'Сделать заказ в Крепости ассасинов.';
 	}
 	else
@@ -265,7 +265,7 @@ $(function(){
 		tasticDescription = 'Провести успешно с Железным Птицем указанное количество боев.';
 	}
 	else
-	if (tasticQuest.indexOf('Он стриж, а может быть енот, приобрети его услуги, без лишних забот.') > 0) {
+	if (tasticQuest.indexOf('Он стриж, а может быть енот. Прогноз его узнать ты будь готов.') > 0) {
 		tasticDescription = 'Заказать прогноз погоды (можно и бесплатный).';
 	}
 	else
