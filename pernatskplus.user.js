@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.3.2
+// @version     0.3.3
 // ==/UserScript==
 
 $(function(){
@@ -315,6 +315,10 @@ $(function(){
 	else
 	if (tasticQuest.indexOf('Пыль, земля, немного серы, глина, солим все без меры, да песка добавим ловко - замешается') > 0) {
 		tasticDescription = 'Замешать шпаклёвку';
+	}
+	else
+	if (tasticQuest.indexOf('Разомнись-ка ты пойди... шары в поле прокати...') > 0) {
+		tasticDescription = 'Сыграть в гольф';
 	}
 	else
 	if (tasticQuest.indexOf('Редкие вещи повсюду ищи, несколько штук и мне покажи.') > 0) {
