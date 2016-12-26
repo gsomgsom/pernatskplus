@@ -7,7 +7,7 @@
 // @namespace   https://pernatsk.ru/*
 // @include     https://pernatsk.ru/*
 // @match       https://pernatsk.ru/*
-// @version     0.3.3
+// @version     0.3.4
 // ==/UserScript==
 
 $(function(){
@@ -117,7 +117,7 @@ $(function(){
 		tasticDescription = 'Потерять указанное количество здоровья.';
 	}
 	else
-	if (tasticQuest.indexOf('Бойцами славен его род - навались толпой народ!') > 0) {
+	if (tasticQuest.indexOf('Бойцами славен его род - навались толпой, народ!') > 0) {
 		tasticDescription = 'Провести сражение с Ефремычем, с любым результатом.';
 	}
 	else
